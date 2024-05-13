@@ -1,5 +1,11 @@
 .vscode/
+./x64
 *.json
 *.ilk
 *.obj
-*pdb
+*.pdb
+*.exe
+*.enc
+*.filters
+*.user
+*.sln

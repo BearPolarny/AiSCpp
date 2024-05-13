@@ -1,10 +1,10 @@
 #include <string>
 
-template<typename Val>
+template<typename Key, typename Val>
 struct DictElem
 {
 public:
-	DictElem(std::string k, Val val) :key(k), value(val) {}
-	std::string key;
+	DictElem(Key k, Val val) :key(k), value(val) {}
+	Key key;
 	Val value;
 };

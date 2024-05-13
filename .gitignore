@@ -1,5 +1,6 @@
 .vscode/
-./x64
+x64/
+.vs/
 *.json
 *.ilk
 *.obj
@@ -9,3 +10,4 @@
 *.filters
 *.user
 *.sln
+*.vcxproj

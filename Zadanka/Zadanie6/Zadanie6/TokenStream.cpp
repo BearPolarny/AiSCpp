@@ -5,13 +5,14 @@
 TokenStream::TokenStream()
     :full(false), buffer(0)   // no Token in buffer
 {
-    dict.append("help", help);
-    dict.append("c", c);
-    dict.append("p", p);
-    dict.append("quit", quit);
-    dict.append("pow", pow);
-    dict.append("root", root);
-    dict.append("let", declkey); // Add all keywords to dictionary
+    keywords.append("help", help);
+    keywords.append("c", c);
+    keywords.append("p", p);
+    keywords.append("quit", quit);
+    keywords.append("pow", pow);
+    keywords.append("root", root);
+    keywords.append("let", declkey); // Add all keywords to dictionary
+
 }
 
 void TokenStream::putback(Token t)
@@ -63,9 +64,9 @@ Token TokenStream::getToken()
             //s += ch;
             while (std::cin.get(ch) && (isalpha(ch) || isdigit(ch))) s += ch;
             std::cin.putback(ch);
-            if (dict.key_exists(s))
+            if (keywords.key_exists(s))
             {
-                switch (dict[s])
+                switch (keywords[s])
                 {
                 case help:
                     return Token(help_com, 0);

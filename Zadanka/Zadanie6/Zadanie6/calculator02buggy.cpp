@@ -90,11 +90,12 @@ double primary(TokenStream* ts, VariableTable* variables)
 
         return combinate(n, m);
     }
-    case 'r':
+    case ts->root_com:
     {
         t = ts->getToken();
         if (t.getKind() != '(') throw std::runtime_error("'(' expected. For more info use \"help r\" command");
         double n = expression(ts, variables);
+        if (n<0) throw std::runtime_error("Root of negative number"); // TODO: Complex root
         t = ts->getToken();
         if (t.getKind() != ',') throw std::runtime_error("',' expected. For more info use \"help r\" command");
         double m = expression(ts, variables);
@@ -103,7 +104,7 @@ double primary(TokenStream* ts, VariableTable* variables)
 
         return pow(n,1./m);
     }
-    case 'o':
+    case ts->pow_com:
     {
         t = ts->getToken();
         if (t.getKind() != '(') throw std::runtime_error("'(' expected. For more info use \"help o\" command");
@@ -116,8 +117,13 @@ double primary(TokenStream* ts, VariableTable* variables)
 
         return pow(n, m);
     }
-    case ts->number : case '!':           // we use '8' to represent a number
+    case ts->number : case ts->factorial:           // we use '8' to represent a number
         return t.getValue();  // return the number's value
+
+    case '-':
+        return -primary(ts, variables);
+    case '+':
+        return primary(ts, variables);
     case ts->name:
         ts->putback(Token(ts->number, variables->getValue(t.getName())));
         return primary(ts, variables);
@@ -135,7 +141,7 @@ double factorial(TokenStream* ts, VariableTable* variables)
     while (true)
     {
         Token t = ts->getToken();
-        if (t.getKind() == '!')
+        if (t.getKind() == ts->factorial)
         {
             if (left == int(left) && left > 0) {
                 left = fact(left);
@@ -294,7 +300,7 @@ void calculate(TokenStream* ts, VariableTable* variables)
                 if (t.getKind() == ts->help_com) help(ts);
                 else {
                     ts->putback(t);
-                    std::cout << ts->result << statement(ts, variables) << std::endl;
+                    std::cout << ts->print << statement(ts, variables) << std::endl;
                 }
 
                 //if (t.getKind() == ts->quit) break; // 'q' for quit

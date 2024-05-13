@@ -1,27 +1,27 @@
 //#include "Dictionary.hpp"
 #include <stdexcept>
 
-#include "DictElem.cpp"
+#include "DictElem.cpp"  // linker is problematic with hpp
 #include <vector>
 #include <string>
 
-template <typename Value>
+template <typename Key, typename Value>
 class Dictionary
 {
 public:
 	Dictionary() {};
-	Value operator[](std::string key);
-	void append(std::string key, Value value);
-	void remove(std::string key);
-	bool key_exists(std::string k);
+	Value operator[](Key key);
+	void append(Key key, Value value);
+	void remove(Key key);
+	bool key_exists(Key k);
 private:
-	std::vector<DictElem<Value>> elems;
+	std::vector<DictElem<Key, Value>> elems;
 };
 
 
 
-template<typename Value>
-Value Dictionary<Value>::operator[](std::string key)
+template <typename Key, typename Value>
+Value Dictionary<Key, Value>::operator[](Key key)
 {
 	for (DictElem elem : elems)
 	{
@@ -30,15 +30,16 @@ Value Dictionary<Value>::operator[](std::string key)
 	throw std::domain_error("No element with this name!");
 }
 
-template<typename Value>
-void Dictionary<Value>::append(std::string key, Value value)
+
+template <typename Key, typename Value>
+void Dictionary<Key, Value>::append(Key key, Value value)
 {
-	if (!key_exists(key)) elems.push_back(DictElem<Value>(key, value));
+	if (!key_exists(key)) elems.push_back(DictElem<Key, Value>(key, value));
 	else throw std::domain_error("This name already exists!");
 }
 
-template<typename Value>
-void Dictionary<Value>::remove(std::string key)
+template <typename Key, typename Value>
+void Dictionary<Key, Value>::remove(Key key)
 {
 	int pos = 0;
 	if (key_exists(key))
@@ -55,8 +56,8 @@ void Dictionary<Value>::remove(std::string key)
 	return;
 }
 
-template<typename Value>
-bool Dictionary<Value>::key_exists(std::string k)
+template <typename Key, typename Value>
+bool Dictionary<Key, Value>::key_exists(Key k)
 {
 	for (DictElem elem : elems)
 	{
